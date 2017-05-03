@@ -20,24 +20,11 @@ public class ServidorEntrada {
     private ServerSocket server;
     
     private List<String> ips;
-    private List<Integer> orden;
     
     public ServidorEntrada() {
         ips = new ArrayList();
-        orden = new ArrayList();
-        
-        crearListaOrden();
     }
 
-    /**
-     * Crea la lista de orden que indicara quien iniciara el juego.
-     */
-    private void crearListaOrden(){
-        orden.add(1);
-        orden.add(2);
-        orden.add(3);
-    }
-    
     /**
      * Inicializa el servidor en la ip y puerto especificado.
      *
@@ -59,14 +46,10 @@ public class ServidorEntrada {
                         
                         Random random = new Random();
                         
-                        int indexOrden = random.nextInt(orden.size());
-                        
                         ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(peerNuevo.getOutputStream()));
                         out.writeObject(ips);
-                        out.writeObject(String.valueOf(orden.get(indexOrden)));
+                        out.writeObject(String.valueOf(random.nextInt(Integer.MAX_VALUE)));
                         out.flush();
-                        
-                        orden.remove(indexOrden);
                         
                         ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(peerNuevo.getInputStream()));
                         String ip = (String) in.readObject();
